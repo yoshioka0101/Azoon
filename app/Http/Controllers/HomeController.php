@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use \App\Memo;
 use \App\User;
+use Illuminate\Support\Facades\DB;
+
 
 
 class HomeController extends Controller
@@ -25,16 +27,6 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
-    {
-        //↓でログインしているユーザの情報を渡す
-        $user = \Auth::user();
-        //ここでメモの中身をログインしているアカウントのIDと一致させないといけない
-        $memos = Memo::where('status',1)->orderBy('created_at','DESC')->paginate(10);
-        //dd($memos);
-        return view('home',compact('user','memos'));
-    }
-
 
     public function content($id){
         $user = \Auth::user();
@@ -43,14 +35,6 @@ class HomeController extends Controller
         $memos = Memo::where('user_id',$user['id'])->where('status',1)->get();
 
         return view ('content',compact('memo','user','memos'));
-    }
-
-    public function checklist(Request $request , $id){
-        $input = $request->all();
-        //dd($inputs);
-        Memo::where('id',$id)->update([ 'checklist' => 1 ]);
-        
-        return redirect()->route('home');
     }
 
     public function search(Request $request){

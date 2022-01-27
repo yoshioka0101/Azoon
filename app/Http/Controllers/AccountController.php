@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use \App\Memo;
 use \App\User;
-use \App\Tag;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -30,8 +29,6 @@ class AccountController extends Controller
     {
         $data = $request->all();
         //dd($data);
-
-        $tag_id = Tag::insertGetId(['name' => $data['tag'] , 'user_id' => $data['user_id']]);
         
         $image = $request->file('image');
         if($request->hasFile('image')){
@@ -40,7 +37,7 @@ class AccountController extends Controller
         }else{
             $path = null;
         }
-        dd($image);
+        //dd($image);
         // POSTされたデータをDB（memosテーブル）に挿入
         // MEMOモデルにDBへ保存する命令を出す
         $memo_id = Memo::insertGetId(
@@ -49,7 +46,6 @@ class AccountController extends Controller
             'user_id' => $data['user_id'],  
             'image' => $path[1],
             'url' => $data['url'],
-            'tag_id' => $tag_id,
             'status' => 1
             ]);
 
@@ -61,9 +57,8 @@ class AccountController extends Controller
         $user = \Auth::user();
         $memo = Memo::where('status','1')->where('id',$id)->first();
         $memos = Memo::where('status',1)->get();
-        $tags = Tag::where('user_id',$user['id'])->get();
         
-        return view ('edit',compact('memo','user','memos','tags'))->with('flash_edit', '投稿が完了しました');
+        return view ('edit',compact('memo','user','memos'))->with('flash_edit', '投稿が完了しました');
         
     }
 
@@ -73,7 +68,6 @@ class AccountController extends Controller
         $data = ['title' => $inputs['title'],
                 'content' => $inputs['content'],
                 'url' => $inputs['url'],
-                'tag_id' => $inputs['tag_id'],
                 ];
         if($request->hasFile('image')) {
             $path = $request->file('image')->store('public');
@@ -94,18 +88,20 @@ class AccountController extends Controller
         return redirect()->route('home')->with('flash-delete','メモの削除が完了しました');
     }
 
+    /*
     public function userlist(){
         $userlist = User::paginate(10);
         $memos = Memo::where('status','1')->count();
         
         return view('userlist',compact('userlist','memos'));        
         }            
-
+    */
+    
     public function userdetail($id){
-        $users = User::where('id',$id)->get();
+        $user = User::where('id',$id)->first();
         $memos = Memo::where('status',1)->get();
-        //user_idと$users[id]が一致していたらcountする
-        return view('userdetail',compact('users','memos'));
+        //dd($memos);
+        return view('userdetail',compact('user','memos'));
     }
 
     public function account(Request $request,$id){

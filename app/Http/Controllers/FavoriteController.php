@@ -19,7 +19,6 @@ class FavoriteController extends Controller
         return redirect()->route('home');
     }
 
-
     public function destroy($id)
     {
         $memo = Memo::find($id);
@@ -30,13 +29,13 @@ class FavoriteController extends Controller
 
     public function userlist(){
         $userlist = User::paginate(10);
-        $memos = DB::table('memo_user')->
-                join('users' , 'users.id' , '='  ,'memo_user.user_id')->
+        $memos = Memo::count();
+        $user = \DB::table('follow_users')->
+                join('users','users.id','=','followed_user_id')->
                 count();
-        //dd($memos);    
-        return view('userlist',compact('userlist','memos'));        
+
+        //dd($user);    
+        return view('userlist',compact('userlist','memos','user'));        
         }            
-
-
 
 }

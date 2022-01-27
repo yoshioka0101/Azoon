@@ -6,11 +6,13 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function index(): View
+
+    public function index(User $user)
     {
-        $users = User::query()
-            ->withCount(['memosCheckedTrue', 'memosCheckedFalse'])
-            ->get();
-        return view('userlist', compact('users'));
+        $all_users = $user->getAllUsers(auth()->user()->id);
+
+        return view('users.index', [
+            'all_users'  => $all_users
+        ]);
     }
 }

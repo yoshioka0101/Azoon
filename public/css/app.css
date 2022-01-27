@@ -92,6 +92,9 @@ p {
   color:#000;
 }
 
+p .content {
+  margin: 0 auto;
+}
 abbr[title],
 abbr[data-original-title] {
   text-decoration: underline;
@@ -1675,6 +1678,7 @@ pre code {
 }
 .table tbody + tbody {
   border-top: 2px solid #dee2e6;
+  
 }
 
 .table-sm th,
@@ -1854,6 +1858,7 @@ pre code {
 .table-dark > th,
 .table-dark > td {
   background-color: #c6c8ca;
+  
 }
 .table-dark th,
 .table-dark td,
@@ -1898,6 +1903,7 @@ pre code {
 .table-dark {
   color: #fff;
   background-color: #343a40;
+  text-align: center;
 }
 .table-dark th,
 .table-dark td,
@@ -2462,6 +2468,10 @@ fieldset:disabled a.btn {
   color: #fff;
   background-color: #3490dc;
   border-color: #3490dc;
+  width:150px;
+  margin-left:20px;
+  margin-top:10px;
+
 }
 .btn-primary:hover {
   color: #fff;
@@ -10037,6 +10047,7 @@ h3 {
 
   .table-dark {
     color: inherit;
+    
   }
   .table-dark th,
 .table-dark td,
@@ -10119,11 +10130,6 @@ header.masthead {
   color:#3490dc;
 }
 
-
-.content-a{
-  color:#3490dc
-}
-
 .name{
   color: #1d68a7;
 }
@@ -10177,19 +10183,30 @@ p.img_center{
 
   div.memo-content {
     width:90%; 
-    height:200px;
+    height:150px;
     margin:0 auto; 
-    padding:20px; 
+    margin-bottom: 10px;
+    overflow: scroll;
     border:1px solid black;
     background-color:white;
     white-space: pre-wrap;
+    border-radius: 10px;
     }
 
     div.url {
       width:90%; 
-      height:5%;
+      height:100px;
       margin:0 auto; 
-      padding:20px; border:1px solid black;
-      background-color:white;
       white-space: pre-wrap;
       }
+
+
+ #url{
+  color:blue; 
+}
+
+#search{
+  padding-top:5px;
+  padding-bottom: 5px;
+  margin: 0 auto;
+}
