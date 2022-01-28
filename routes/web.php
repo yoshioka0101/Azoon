@@ -20,13 +20,17 @@ Auth::routes();
 
 //一般ユーザー
 Route::group(['middleware' => ['auth', 'can:user-higher']], function () {
-    Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/home', 'MemoController@timeline')->name('home');
     Route::get('/search', 'HomeController@search')->name('search');
     Route::get('/content/{id}', 'HomeController@content')->name('content');
     Route::post('/checklist/{id}', 'HomeController@checklist')->name('checklist');
+    Route::get('/userlist', 'FavoriteController@userlist')->name('userlist');
+
     //いいねといいね取り消し
     Route::post('content/{id}/favorites', 'FavoriteController@store')->name('favorites');
     Route::post('content/{id}/unfavorites', 'FavoriteController@destroy')->name('unfavorites');
+    Route::post('/users/{user}/follow', 'FollowUserController@follow')->name('follow');
+    Route::post('/users/{user}/unfollow', 'FollowUserController@unfollow')->name('unfollow');
     }
 );
   
@@ -38,7 +42,6 @@ Route::group(['middleware' => ['auth', 'can:user-higher']], function () {
     Route::get('/edit/{id}', 'AccountController@edit')->name('edit');
     Route::post('/update/{id}', 'AccountController@update')->name('update');
     Route::post('/delete/{id}', 'AccountController@delete')->name('delete');
-    Route::get('/userlist', 'FavoriteController@userlist')->name('userlist');
     Route::get('/userdetail/{id}', 'AccountController@userdetail')->name('userdetail');
     Route::post('/account/{id}', 'AccountController@account')->name('accout');
     Route::post('/accountdelete/{id}', 'AccountController@accountdelete')->name('accoutdelete');

@@ -40,11 +40,6 @@
                     <input type="text" id="url" class="form-control" name='url'  placeholder="URL">
                 </div>
             
-                <!--タグメモ-->
-                <div class="form-group">
-                    <label for="tag">タグ</label>
-                    <input name='tag' type="text" class="form-control" id="tag" placeholder="タグを入力">
-                </div>
                             </div>
 </div>
         </div>

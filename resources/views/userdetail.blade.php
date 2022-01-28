@@ -9,38 +9,41 @@
 
                 <h1>プロフィール</h1>
                 <h3 class="profile"><i class="fas fa-user-alt"></i> 基本情報</h3>
-                @foreach($users as $user)
-                <p>名前  :  {{ $user['name'] }}</p>
-                <p>メールアドレス  :  {{ $user['email'] }}</p>
-                @endforeach
                 
+                <p>名前  :  {{ $user->name }}</p>
+                @can('admin-higher')
+                <p>メールアドレス  :  {{ $user->email }}</p>
+                @endcan
+                    
 
                 <h3 class="profile"><i class="fas fa-key"></i>  ユーザ権限</h3>
-                <p>現在の権限 : 
-                @if($user->role ==='admin-higher')
-                    管理者
-                @else
-                一般ユーザー
-                @endcan
+                <p>現在の権限 :
+                    @if($user->role == 1)
+                        管理者
+                    @else
+                        一般ユーザー
+                    @endif
                 </p>
 
-                
-                <form method = 'POST' action = "/account/{{ $user['id'] }}" id = 'account-form'>
-                    @csrf
-                <button type="submit" class="btn btn-danger" >管理者にする</button>
-                </form>
-                
+                @if($user->role == 1)
                 <form method = 'POST' action = "/accountdelete/{{ $user['id'] }}" id = 'accountdelete-form'>        
                     @csrf        
                 <button type="submit" class="btn btn-danger" >管理者削除する</button>
                 </form> 
+
+                @else
+                <form method = 'POST' action = "/account/{{ $user['id'] }}" id = 'account-form'>
+                    @csrf
+                <button type="submit" class="btn btn-danger" >管理者にする</button>
+                </form>
+                @endif
+                
 
                 <h3 class="profile"><i class="fas fa-film"></i>  研修一覧</h3>
                 
             <table class="table table-striped table-hover">
             
                         <tr>
-                        <th scope="col">CheckBox</th>
                         <th scope="col">タイトル</th>
                         <th scope="col">更新日付</th>
                         <th >削除ボタン</th>
@@ -49,11 +52,6 @@
                 @foreach($memos AS $memo)
                     <tbody>
                         <tr>
-                        <th scope="row">
-                        @if($memo->users()->where('user_id', Auth::id())->exists())
-                        <i id = 'check-icon' class="far fa-check-square"></i>
-                        @endif
-                        </th>
                         <td>
                             <a href = "/content/{{ $memo['id'] }}" id="memo-title">
                             {{ $memo['title'] }}
@@ -75,7 +73,6 @@
                         </tr>
                     </tbody>
                     @endforeach
-                    
                     
             </table>
 

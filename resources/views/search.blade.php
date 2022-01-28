@@ -35,7 +35,7 @@
                             {{ $mem['title'] }}
             </a>
             </td>
-                <td>{{ $mem->content }}</td>
+                <td>{{ $mem->updated_at }}</td>
             </tr>
         </tbody>
         @endforeach

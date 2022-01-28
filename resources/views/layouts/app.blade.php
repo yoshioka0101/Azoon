@@ -55,11 +55,9 @@
                                                      document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
-                                    @can('supadmin-higher')
                                     <a class="dropdown-item" href="{{ route('userlist') }}">
                                         {{ __('ユーザーの一覧') }}
                                     </a>
-                                    @endcan
 
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

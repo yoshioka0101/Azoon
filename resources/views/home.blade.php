@@ -42,7 +42,6 @@
                         </td>
 
                         <td>
-
                             {{ $memo['updated_at'] }}
                         </td>
 

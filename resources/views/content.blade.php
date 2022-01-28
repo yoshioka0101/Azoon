@@ -20,23 +20,20 @@
 
                     <div class="memo-content" >
                     
-                    <p>{{ $memo['content'] }} </p>
+                    <p class="content">{{ $memo['content'] }} </p>
 
                     </div>
 
                 
                 <!-- URLをaで表示する -->
-                <div class="url">
-                <p>研修後のアンケートフォーム<br>
-                <a href ="{{ $memo['url'] }}" class="content-a"> {{ $memo['url']}}  </a></p>
+                <div class="url">  
+                <a href ="{{ $memo['url'] }}" id="url" >研修後のアンケートフォーム</a>
                 </div>
 
                 <br>
 
                 <a href ='/home' class="btn btn-primary btn-lg" style ='width:90px'>戻る</a>
 
-
-                                    
                 @if($memo->users()->where('user_id', Auth::id())->exists())
                     <form action="{{ route('unfavorites', $memo) }}" method="POST" class="btn">
                     @csrf
@@ -53,10 +50,6 @@
                     <div class="row justify-content-center">
                         <p>完了ユーザー数:{{ $memo->users()->count() }}</p>
                     </div>
-
-                @can('admin-higher')
-                    <a href = "/like" class = "btn newpost">研修済ユーザー</a>
-                    @endcan
 
 
 </div>
