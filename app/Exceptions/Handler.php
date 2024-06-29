@@ -2,58 +2,32 @@
 
 namespace App\Exceptions;
 
-use Exception;
+use Throwable;  // PHP の基本的な例外インターフェース
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-
-//下記を追記する
 use Illuminate\Auth\AuthenticationException;
-use Auth; 
-//上記までを追記する
+use Illuminate\Support\Facades\Auth;  // Auth ファサードの正しい use ステートメント
 
 class Handler extends ExceptionHandler
 {
-    /**
-     * A list of the exception types that are not reported.
-     *
-     * @var array
-     */
     protected $dontReport = [
         //
     ];
 
-    /**
-     * A list of the inputs that are never flashed for validation exceptions.
-     *
-     * @var array
-     */
     protected $dontFlash = [
         'password',
         'password_confirmation',
     ];
 
-    /**
-     * Report or log an exception.
-     *
-     * @param  \Exception  $exception
-     * @return void
-     */
-    public function report(Exception $exception)
+    public function report(Throwable $exception)
     {
         parent::report($exception);
     }
 
-    /**
-     * Render an exception into an HTTP response.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
-     * @return \Illuminate\Http\Response
-     */
-    public function render($request, Exception $exception)
+    public function render($request, Throwable $exception)
     {
         return parent::render($request, $exception);
     }
-    //下記を追記する
+
     protected function unauthenticated($request, AuthenticationException $exception)
     {
         if ($request->expectsJson()) {
@@ -64,6 +38,4 @@ class Handler extends ExceptionHandler
         }
         return redirect()->guest(route('login'));
     }
-    //上記までを追記する
-
 }
