@@ -95,6 +95,54 @@
 |followed_user_id|integer|null:false|フォローされているユーザ||
 |following_user_id|string|null:false|フォローしているユーザ||
 
+### ER図
+
+以下の図は `User`, `Memos`, `Memo_User`, `Follow_User` テーブル間のリレーションシップを表しています。
+
+- Userテーブル：ユーザー情報を管理しています。
+- Memosテーブル：ユーザーが投稿したメモの情報を管理しています。`user_id` でメモとユーザーを関連付けることでどのユーザーのメモなのかを明らかにします。
+- Memo_Userテーブル：ユーザーとメモの多対多の関係を表しています。
+- Follow_Userテーブル：ユーザー間の相互フォロー関係を管理しています。`followed_user_id` はフォローされているユーザー、`following_user_id` はフォローしているユーザーを示します。これらをすることでフォローしているユーザーの投稿内容を見ることができます。
+
+```mermaid
+erDiagram
+    User {
+        integer id
+        string name
+        string email
+        integer role
+    }
+    
+    Memos {
+        integer id
+        string content
+        string title
+        integer user_id
+        string image
+        integer url
+        integer status
+    }
+    
+    Memo_User {
+        integer id
+        integer user_id
+        integer memo_id
+    }
+    
+    Follow_User {
+        integer id
+        integer followed_user_id
+        integer following_user_id
+    }
+
+    User ||--o{ Memos : "has"
+    User ||--o{ Memo_User : "associated with"
+    Memos ||--o{ Memo_User : "related to"
+    User ||--o{ Follow_User : "follows"
+    User ||--o{ Follow_User : "is followed by"
+
+
+```
 
 
 **ユーザーページ**
