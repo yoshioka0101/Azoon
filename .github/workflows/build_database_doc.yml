@@ -1,0 +1,59 @@
+name: Build database documents by SchemaSpy
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "database/migrations/**"
+  workflow_dispatch:
+
+jobs:
+  build-database-doc:
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: mysql:8.0.40
+        ports:
+          - 3306:3306
+        env:
+          TZ: Asia/Tokyo
+          MYSQL_DATABASE: db_schema
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+        options: >-
+          --health-cmd "mysqladmin ping -h localhost"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      # リポジトリをチェックアウト
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # SchemaSpy用の設定ファイルを作成
+      - name: Create schemaspy.properties
+        run: |
+          echo "schemaspy.t=mysql" > schemaspy.properties
+          echo "schemaspy.host=localhost" >> schemaspy.properties
+          echo "schemaspy.db=db_schema" >> schemaspy.properties
+          echo "schemaspy.u=root" >> schemaspy.properties
+          echo "schemaspy.p=" >> schemaspy.properties
+          echo "schemaspy.o=/output" >> schemaspy.properties
+
+      # SchemaSpy を実行してドキュメントを生成
+      - name: Run SchemaSpy
+        run: |
+          docker run --rm \
+          --net=host \
+          -v $GITHUB_WORKSPACE/output:/output \
+          -v $GITHUB_WORKSPACE/schemaspy.properties:/schemaspy.properties \
+          schemaspy/schemaspy:snapshot
+
+      # 生成されたドキュメントをGitHub Pagesにデプロイ
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./output
