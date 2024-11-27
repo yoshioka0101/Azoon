@@ -38,6 +38,7 @@ jobs:
           echo "schemaspy.t=mysql" > schemaspy.properties
           echo "schemaspy.host=localhost" >> schemaspy.properties
           echo "schemaspy.db=db_schema" >> schemaspy.properties
+          echo "schemaspy.s=db_schema" >> schemaspy.properties
           echo "schemaspy.u=root" >> schemaspy.properties
           echo "schemaspy.p=" >> schemaspy.properties
           echo "schemaspy.o=/output" >> schemaspy.properties
