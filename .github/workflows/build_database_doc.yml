@@ -1,0 +1,102 @@
+name: Build database documents by SchemaSpy
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "database/migrations/**"
+  workflow_dispatch:
+
+jobs:
+  build-database-doc:
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: mysql:8.0
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_DATABASE: db_schema
+          MYSQL_ROOT_PASSWORD: root
+        options: >-
+          --health-cmd "mysqladmin ping -h localhost"
+          --health-interval 20s
+          --health-timeout 10s
+          --health-retries 10
+
+    steps:
+      # リポジトリのコードをチェックアウトします
+      - name: Checkout Azoon code
+        uses: actions/checkout@v3
+
+      # 必要な依存関係をインストールします
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            php-cli \
+            php-xml \
+            php-mbstring \
+            curl \
+            lsb-release \
+            apt-transport-https \
+            ca-certificates \
+            sudo \
+            docker.io \
+            git
+          composer install --dev
+
+      # MySQLコンテナが起動するまで待機します
+      - name: Wait for MySQL container to be ready
+        run: |
+          docker ps
+          docker exec -it laravel-db mysqladmin ping -h localhost --wait=30
+
+      # DB作成
+      - name: Create DB if not exists
+        run: |
+          mysql --protocol=tcp -h localhost -P 3306 -u root -proot -e "CREATE DATABASE IF NOT EXISTS laraveldb"
+
+      # DBテーブル作成
+      - name: Run migrations
+        run: |
+          php artisan migrate
+
+      # 動的に schemaspy.properties ファイルを生成します
+      - name: Generate schemaspy.properties
+        run: |
+          echo "schemaspy.t=mysql" > schemaspy.properties
+          echo "schemaspy.host=localhost" >> schemaspy.properties
+          echo "schemaspy.db=laraveldb" >> schemaspy.properties
+          echo "schemaspy.s=laraveldb" >> schemaspy.properties
+          echo "schemaspy.u=root" >> schemaspy.properties
+          echo "schemaspy.p=root" >> schemaspy.properties
+          echo "schemaspy.outputDir=./output" >> schemaspy.properties
+          echo "schemaspy.html.wrapper=true" >> schemaspy.properties
+
+      # SchemaSpy を実行してER図を生成します
+      - name: Run SchemaSpy
+        run: |
+          docker run --rm \
+            -v $GITHUB_WORKSPACE/output:/output \
+            -v $GITHUB_WORKSPACE/schemaspy.properties:/schemaspy.properties \
+            schemaspy/schemaspy:snapshot \
+            -t mysql \
+            -host localhost \
+            -db laraveldb \
+            -s laraveldb \
+            -u root \
+            -p "root" \
+            -o /output
+
+      # SchemaSpyで生成された出力をoutputディレクトリにコピーします
+      - name: Copy SchemaSpy output to output directory
+        run: |
+          cp -r ./output/* ./output/
+
+      # 一時ファイルを削除してクリーンアップします
+      - name: Clean up
+        run: |
+          sudo rm -rf /tmp/schema
