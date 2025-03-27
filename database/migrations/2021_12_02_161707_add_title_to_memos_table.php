@@ -15,7 +15,7 @@ class AddTitleToMemosTable extends Migration
     {
 
             Schema::table('memos', function (Blueprint $table) {
-                $table->string('title')->default('null')->after('content');
+                 $table->string('title')->nullable()->after('content');
             });
             }
 

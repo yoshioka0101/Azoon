@@ -1,8 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User; 
 
 class Memo extends Model
 {
@@ -12,11 +14,15 @@ class Memo extends Model
     }
     */
 
+    use HasFactory;
+
     protected $fillable = [
         'title',
-        'contnet',
+        'content',
         'url',
-        'image'
+        'image',
+        'user_id',
+        'status'
     ];
 
     /*public function user() {
@@ -33,4 +39,3 @@ class Memo extends Model
     }
  
 }
-

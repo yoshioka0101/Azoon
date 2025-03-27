@@ -15,7 +15,7 @@ class CreateMemosTable extends Migration
     {
         Schema::create('memos', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->longText('content')->default('NULL');
+            $table->longText('content')->nullable();
             $table->integer('user_id');
             $table->integer('status')->defalut('1');
             
