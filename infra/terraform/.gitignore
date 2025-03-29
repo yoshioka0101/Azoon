@@ -1,0 +1,9 @@
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.*.backup
+terraform.tfstate.backup
+terraform_*.zip
+downloaded_test.txt
+test.txt
+userdata.sh
