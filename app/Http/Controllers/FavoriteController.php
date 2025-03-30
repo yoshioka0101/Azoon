@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Memo;
-use App\User;
+use App\Models\Memo;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Auth;
 

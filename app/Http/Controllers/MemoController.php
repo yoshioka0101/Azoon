@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 use \App\Models\Memo;
-use \App\User;
+use \App\Models\User;
 
 
 
