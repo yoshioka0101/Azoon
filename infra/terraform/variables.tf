@@ -26,3 +26,14 @@ variable "vpc_id" {
 variable "my_ip" {
   default = "39.110.229.9/32"
 }
+
+variable "db_username" {
+  description = "The username for the RDS instance"
+  type        = string
+}
+
+variable "db_password" {
+  description = "The password for the RDS instance"
+  type        = string
+  sensitive   = true
+}
