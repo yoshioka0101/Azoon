@@ -4,8 +4,8 @@ resource "aws_route53_record" "chikoclock" {
   type    = "A"
 
   alias {
-    name                   = "chikoclock-alb-1617192878.ap-northeast-1.elb.amazonaws.com"
-    zone_id                = "Z14GRHDCWA56QT"
+    name                   = aws_lb.chikoclock_alb.dns_name
+    zone_id                = aws_lb.chikoclock_alb.zone_id
     evaluate_target_health = false
   }
 }

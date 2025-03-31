@@ -15,7 +15,7 @@ variable "ami_id" {
 }
 
 variable "subnet_ids" {
-  type = list(string)
+  type    = list(string)
   default = ["subnet-02f8d254a38e4aaf6", "subnet-0a09be0591765b5ae", "subnet-0490bf14de4688b62"]
 }
 
@@ -25,4 +25,15 @@ variable "vpc_id" {
 
 variable "my_ip" {
   default = "39.110.229.9/32"
+}
+
+variable "db_username" {
+  description = "The username for the RDS instance"
+  type        = string
+}
+
+variable "db_password" {
+  description = "The password for the RDS instance"
+  type        = string
+  sensitive   = true
 }
