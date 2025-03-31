@@ -16,6 +16,8 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::post('/upload-video', [FileController::class, 'uploadVideo'])->name('uploadVideo');
+
 Route::get('/signed-url/{filename}', function ($filename) {
   if (!Storage::disk('s3')->exists($filename)) {
       return response()->json(['error' => 'File not found'], 404);
