@@ -16,7 +16,16 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('/signed-url/{filename}', function ($filename) {
+  if (!Storage::disk('s3')->exists($filename)) {
+      return response()->json(['error' => 'File not found'], 404);
+  }
 
+  // CloudFront 経由の署名付きURLを作成
+  $cloudfrontUrl = env('AWS_CLOUDFRONT_URL') . '/' . $filename;
+
+  return response()->json(['signed_url' => $cloudfrontUrl]);
+});
 
 //一般ユーザー
 Route::group(['middleware' => ['auth', 'can:user-higher']], function () {
